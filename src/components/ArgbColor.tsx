@@ -1,8 +1,8 @@
 import { hexFromArgb } from '@material/material-color-utilities'
+import { ref, watch } from 'vue'
 import { copyToClipboard } from '../utils/clipboard'
 import { cn } from '../utils/cn'
 import { defineVaporComponent } from '../utils/define-vapor-component'
-import { ref, watch } from 'vue'
 
 export const ArgbColor = defineVaporComponent(
   (props: { tone: number; color: number }) => {
@@ -36,8 +36,18 @@ export const ArgbColor = defineVaporComponent(
         }}
         type="button"
       >
-        <div class={cn("absolute grid place-items-center bg-black/50 w-full h-full rounded-lg transition-opacity", isCopied.value ? 'opacity-100' : 'opacity-0', )}>
-          <div class={cn("i-tabler-check w-6 h-6 transition-transform", isCopied.value ? '' : 'translate-y-5')} />
+        <div
+          class={cn(
+            'absolute grid place-items-center bg-black/50 w-full h-full rounded-lg transition-opacity',
+            isCopied.value ? 'opacity-100' : 'opacity-0',
+          )}
+        >
+          <div
+            class={cn(
+              'i-tabler-check w-6 h-6 transition-transform',
+              isCopied.value ? '' : 'translate-y-5',
+            )}
+          />
         </div>
 
         {props.tone * 10}

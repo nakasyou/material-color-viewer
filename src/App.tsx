@@ -1,5 +1,6 @@
 import {
   argbFromHex,
+  type CustomColor,
   type Scheme,
   type Theme,
   TonalPalette,
@@ -11,9 +12,21 @@ import { SchemeViewer } from './components/SchemeViewer'
 import { SeedPicker } from './components/SeedPicker'
 import { TonalPaletteColors } from './components/TonalPalette'
 import { getMaterialColors } from './utils/get-material-colors'
+import { readThemeStateFromHash } from './utils/url-hash-state'
 
 export default defineVaporComponent(() => {
-  const theme = ref<Theme>(themeFromSourceColor(argbFromHex('#ff0000')))
+  const initialState = readThemeStateFromHash(location.hash)
+  const initialSeedHex = initialState?.seedHex ?? '#ff0000'
+  const initialCustomColors: CustomColor[] =
+    initialState?.customColors?.map(([name, colorHex]) => ({
+      name,
+      value: argbFromHex(colorHex),
+      blend: true,
+    })) ?? []
+
+  const theme = ref<Theme>(
+    themeFromSourceColor(argbFromHex(initialSeedHex), initialCustomColors),
+  )
 
   const lightColors = computed(() =>
     getMaterialColors(theme.value.schemes.light as Scheme),
@@ -46,6 +59,7 @@ export default defineVaporComponent(() => {
             class="cursor-pointer"
             onClick={() => {
               navigator.share({
+                title: 'Material Color Playground',
                 url: location.href,
               })
             }}

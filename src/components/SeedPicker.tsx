@@ -6,10 +6,14 @@ import {
   type Theme,
   themeFromSourceColor,
 } from '@material/material-color-utilities'
-import { computed, effect, ref } from 'vue'
+import { computed, effect, onScopeDispose, ref } from 'vue'
 import { cn } from '../utils/cn'
 import { defineVaporComponent } from '../utils/define-vapor-component'
 import type { MaterialColors } from '../utils/get-material-colors'
+import {
+  readThemeStateFromHash,
+  writeThemeStateToHash,
+} from '../utils/url-hash-state'
 
 const SeedUseButton = defineVaporComponent(
   (props: { onClick: () => void; isActive: boolean; label: string }) => {
@@ -37,6 +41,20 @@ export const SeedPicker = defineVaporComponent(
     const useImage = ref(false)
     const additionalColors = ref<[name: string, color: string][]>([])
 
+    const applyHashToState = (hash: string) => {
+      const state = readThemeStateFromHash(hash)
+      if (!state) return
+      if (state.seedHex) colorString.value = state.seedHex
+      if (state.customColors) {
+        additionalColors.value = state.customColors.map(([name, colorHex]) => [
+          name,
+          colorHex,
+        ])
+      }
+    }
+
+    applyHashToState(location.hash)
+
     const customColors = computed((): CustomColor[] => {
       return additionalColors.value.map(
         ([name, color]): CustomColor => ({
@@ -56,6 +74,29 @@ export const SeedPicker = defineVaporComponent(
 
     effect(() => {
       props.onChangeTheme(theme.value)
+    })
+
+    let lastWrittenHash: string | null = null
+    effect(() => {
+      const nextHash = writeThemeStateToHash({
+        seedHex: colorString.value,
+        customColors: additionalColors.value,
+      })
+      if (nextHash !== location.hash) {
+        lastWrittenHash = nextHash
+        history.replaceState(null, '', nextHash)
+      } else {
+        lastWrittenHash = nextHash
+      }
+    })
+
+    const onHashChange = () => {
+      if (lastWrittenHash === location.hash) return
+      applyHashToState(location.hash)
+    }
+    window.addEventListener('hashchange', onHashChange)
+    onScopeDispose(() => {
+      window.removeEventListener('hashchange', onHashChange)
     })
 
     return (

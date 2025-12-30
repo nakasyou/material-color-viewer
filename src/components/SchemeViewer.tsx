@@ -3,12 +3,12 @@ import {
   hexFromArgb,
   type Scheme,
 } from '@material/material-color-utilities'
+import { ref, watch } from 'vue'
 import { firstUpper, splitWithCamelCase } from '../utils/cases'
 import { copyToClipboard } from '../utils/clipboard'
+import { cn } from '../utils/cn'
 import { defineVaporComponent } from '../utils/define-vapor-component'
 import type { ColorLabels, MaterialColors } from '../utils/get-material-colors'
-import { ref, watch } from 'vue'
-import { cn } from '../utils/cn'
 
 const COLOR_MAP: Record<
   ColorLabels,
