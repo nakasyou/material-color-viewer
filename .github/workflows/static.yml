@@ -38,7 +38,7 @@ jobs:
       - name: Install deps
         run: bun i
       - name: Build
-        run: bun run build --base=material-color-viewer
+        run: bun run build --base=/material-color-viewer
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
