@@ -1,5 +1,5 @@
-# Vue 3 + TypeScript + Vite
+# material-color-viewer
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+<img width="1839" height="1093" alt="image" src="https://github.com/user-attachments/assets/cfdd9910-a61e-4fb2-9b3e-fb933be92050" />
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+A viewer of Material Design 3 Color Scheme, and you can export colors with Tailwind CSS 4 format.
