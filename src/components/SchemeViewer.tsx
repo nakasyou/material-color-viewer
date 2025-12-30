@@ -1,12 +1,14 @@
 import {
+  type ColorGroup,
   hexFromArgb,
   type Scheme,
-  DynamicColor,
-  type ColorGroup,
 } from '@material/material-color-utilities'
+import { firstUpper, splitWithCamelCase } from '../utils/cases'
+import { copyToClipboard } from '../utils/clipboard'
 import { defineVaporComponent } from '../utils/define-vapor-component'
 import type { ColorLabels, MaterialColors } from '../utils/get-material-colors'
-import { firstUpper, splitWithCamelCase } from '../utils/cases'
+import { ref, watch } from 'vue'
+import { cn } from '../utils/cn'
 
 const COLOR_MAP: Record<
   ColorLabels,
@@ -51,24 +53,56 @@ const COLOR_MAP: Record<
   inversePrimary: { on: 'onSurface' },
 }
 
-
 const ColorCard = defineVaporComponent(
   (props: { label: string[]; color: string; background: string }) => {
+    const hex = props.background.toLowerCase()
+    const isCopied = ref(false)
+    let copyTimeout: number | undefined
+    watch(isCopied, (newVal) => {
+      if (newVal) {
+        copyTimeout = setTimeout(() => {
+          isCopied.value = false
+        }, 1000)
+      } else {
+        if (copyTimeout) {
+          clearTimeout(copyTimeout)
+        }
+      }
+    })
     return (
-      <div
-        class="h-20 flex items-end justify-end p-2 rounded-lg hover:scale-105 transition-all hover:drop-shadow-md"
+      <button
+        class="relative h-20 flex items-end justify-end p-2 rounded-lg hover:scale-105 transition-all hover:drop-shadow-md cursor-pointer"
         style={{
-          backgroundColor: props.background,
+          backgroundColor: hex,
           color: props.color,
           borderColor: props.color,
         }}
+        title={hex}
+        onClick={() => {
+          void copyToClipboard(hex)
+          isCopied.value = true
+        }}
+        type="button"
       >
+        <div
+          class={cn(
+            'absolute grid place-items-center bg-black/50  rounded-lg transition-opacity',
+            isCopied.value ? 'opacity-100' : 'opacity-0',
+          )}
+        >
+          <div
+            class={cn(
+              'i-tabler-check w-6 h-6 transition-transform text-white',
+              isCopied.value ? '' : 'translate-y-5',
+            )}
+          />
+        </div>
         <div class="text-xs lowercase text-right" style={{}}>
           {props.label.map((part) => (
             <>{part} </>
           ))}
         </div>
-      </div>
+      </button>
     )
   },
 )

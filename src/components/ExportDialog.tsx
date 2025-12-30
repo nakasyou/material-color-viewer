@@ -1,13 +1,13 @@
 import { Dialog } from '@ark-ui/vue'
 import {
   hexFromArgb,
-  TonalPalette,
   type Theme,
+  TonalPalette,
 } from '@material/material-color-utilities'
-import { defineVaporComponent } from '../utils/define-vapor-component'
 import { computed } from 'vue'
-import { TONE_NUMS } from './TonalPalette'
 import { splitWithCamelCase } from '../utils/cases'
+import { defineVaporComponent } from '../utils/define-vapor-component'
+import { TONE_NUMS } from './TonalPalette'
 
 export const ExportDialog = defineVaporComponent((props: { theme: Theme }) => {
   const tailwindCode = computed(() => {

@@ -1,10 +1,5 @@
-import {
-  type TonalPalette,
-  rgbaFromArgb,
-  hexFromArgb,
-} from '@material/material-color-utilities'
+import type { TonalPalette } from '@material/material-color-utilities'
 import { defineVaporComponent } from '../utils/define-vapor-component'
-import { cn } from '../utils/cn'
 import { ArgbColor } from './ArgbColor'
 
 export const TONE_NUMS = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95]

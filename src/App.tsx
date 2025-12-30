@@ -1,19 +1,16 @@
 import {
   argbFromHex,
-  hexFromArgb,
-  Scheme,
+  type Scheme,
   type Theme,
-  themeFromImage,
-  themeFromSourceColor,
   TonalPalette,
+  themeFromSourceColor,
 } from '@material/material-color-utilities'
-import { defineVaporComponent, ref, computed } from 'vue'
+import { computed, defineVaporComponent, ref } from 'vue'
+import { ExportDialog } from './components/ExportDialog'
+import { SchemeViewer } from './components/SchemeViewer'
+import { SeedPicker } from './components/SeedPicker'
 import { TonalPaletteColors } from './components/TonalPalette'
 import { getMaterialColors } from './utils/get-material-colors'
-import { SchemeViewer } from './components/SchemeViewer'
-import { ColorPicker } from '@ark-ui/vue/color-picker'
-import { SeedPicker } from './components/SeedPicker'
-import { ExportDialog } from './components/ExportDialog'
 
 export default defineVaporComponent(() => {
   const theme = ref<Theme>(themeFromSourceColor(argbFromHex('#ff0000')))
@@ -67,7 +64,7 @@ export default defineVaporComponent(() => {
         />
 
         <div class="font-bold text-lg mb-1 lg:hidden mt-8">PALETTE</div>
-        <div class="flex flex-col gap-2 overflow-x-auto">
+        <div class="flex flex-col gap-2 overflow-x-auto px-3">
           {Object.entries(theme.value.palettes).map(([name, palette]) => (
             <div class="flex items-center">
               <div class="w-28 shrink-0 font-bold text-sm text-left flex items-center gap-1">

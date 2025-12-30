@@ -1,14 +1,15 @@
-import { computed, effect, ref } from 'vue'
-import { defineVaporComponent } from '../utils/define-vapor-component'
-import { cn } from '../utils/cn'
-import type { MaterialColors } from '../utils/get-material-colors'
 import {
   argbFromHex,
-  themeFromImage,
-  themeFromSourceColor,
   type CustomColor,
+  hexFromArgb,
+  sourceColorFromImage,
   type Theme,
+  themeFromSourceColor,
 } from '@material/material-color-utilities'
+import { computed, effect, ref } from 'vue'
+import { cn } from '../utils/cn'
+import { defineVaporComponent } from '../utils/define-vapor-component'
+import type { MaterialColors } from '../utils/get-material-colors'
 
 const SeedUseButton = defineVaporComponent(
   (props: { onClick: () => void; isActive: boolean; label: string }) => {
@@ -47,10 +48,6 @@ export const SeedPicker = defineVaporComponent(
     })
 
     const theme = computed(() => {
-      if (useImage.value && imageElement.value) {
-        // with image
-        return themeFromImage(imageElement.value, customColors.value)
-      }
       return themeFromSourceColor(
         argbFromHex(colorString.value),
         customColors.value,
@@ -58,9 +55,7 @@ export const SeedPicker = defineVaporComponent(
     })
 
     effect(() => {
-      theme.value instanceof Promise
-        ? theme.value.then((t) => props.onChangeTheme(t))
-        : props.onChangeTheme(theme.value)
+      props.onChangeTheme(theme.value)
     })
 
     return (
@@ -112,6 +107,9 @@ export const SeedPicker = defineVaporComponent(
                       image.src = e.target?.result as string
                       image.onload = () => {
                         imageElement.value = image
+                        sourceColorFromImage(image).then((sourceColor) => {
+                          colorString.value = hexFromArgb(sourceColor)
+                        })
                       }
                     }
                     reader.readAsDataURL(file)

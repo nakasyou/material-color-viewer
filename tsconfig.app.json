@@ -13,7 +13,7 @@
     "noUncheckedSideEffectImports": true,
 
     "jsx": "preserve",
-    "jsxImportSource": "vue-jsx-vapor",
+    "jsxImportSource": "vue-jsx-vapor"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
